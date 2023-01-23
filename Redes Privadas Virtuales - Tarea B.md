@@ -1,3 +1,9 @@
+# **SAD Práctica 6**
+## **Redes Privadas Virtuales**
+#### Realizado por: **Iván Piña Castillo**
+
+------------------------------------------------------------------------------------------------------------------------
+
 ## 2. VPN sitio a sitio con OpenVPN y certificados x509 (10 puntos)
 
     Configura una conexión VPN sitio a sitio entre dos equipos del cloud:
