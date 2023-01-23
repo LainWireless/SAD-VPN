@@ -1,3 +1,9 @@
+# **SAD Práctica 6**
+## **Redes Privadas Virtuales**
+#### Realizado por: **Iván Piña Castillo**
+
+------------------------------------------------------------------------------------------------------------------------
+
 ## 4. VPN sitio a sitio con WireGuard (10 puntos)
 
      Configura una VPN sitio a sitio usando WireGuard. Documenta el proceso adecuadamente y compáralo con el del apartado B.
