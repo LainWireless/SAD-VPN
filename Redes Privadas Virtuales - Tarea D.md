@@ -162,7 +162,7 @@ wg-quick up wg0
 ```
 ![Ejercicio 4](capturas/4/8.png)
 
-Y podemos ver que se han establecido la conexión:
+Y podemos ver que se ha establecido la conexión:
 
 ![Ejercicio 4](capturas/4/9.png)
 
