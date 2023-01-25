@@ -153,7 +153,7 @@ topology subnet
 server 10.99.99.0 255.255.255.0  # El rango de ip de la interfaz que se creará (el servidor coge por defecto la primera)
 ifconfig-pool-persist /var/log/openvpn/ipp.txt
 
-push "route 192.168.10.0 255.255.255.0" # La ruta que pasaremos al cliente de la vpn
+push "route 192.168.11.0 255.255.255.0" # La ruta que pasaremos al cliente de la vpn
 
 keepalive 10 120
 --data-ciphers-fallback 'AES-256-CBC'
