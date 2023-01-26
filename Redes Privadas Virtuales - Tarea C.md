@@ -140,7 +140,7 @@ wg
 
 También podemos ver que se ha creado la interfaz que hemos definido:
 
-![Ejercicio 3](capturas/3.5.png)
+![Ejercicio 3](capturas/3/5.png)
 
 Hemos completado la configuración básica del servidor. Ahora procederemos a configurar los clientes.
 
