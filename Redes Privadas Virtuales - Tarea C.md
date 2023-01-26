@@ -11,7 +11,7 @@
 Vamos a establecer una VPN de acceso remoto con Wireguard, la cual conectará tres clientes con una red interna. Estos clientes incluyen una máquina Debian 11, una máquina Windows 10, y una máquina Android. Para probar el funcionamiento, he creado una máquina Debian conectada a una red interna para que los clientes puedan acceder a ella a través del túnel VPN creado.
 
 ### Cliente Interno:
-A conticuación el Vagrantfile del cliente interno:
+A continuación el Vagrantfile del cliente interno:
 ```ruby
 Vagrant.configure("2") do |config|
     config.vm.provider :libvirt do |libvirt|
