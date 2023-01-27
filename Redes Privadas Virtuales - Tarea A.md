@@ -90,11 +90,11 @@ Después vamos a generar el certificado de la CA y la clave con la que firmaremo
 ./easyrsa build-ca
 ```
 
-He usado como frase de paso 1234567890. Tal y como indica la salida del comando, el certificado de ha creado en /etc/openvpn/easy-rsa/pki/ca.crt, mientras la clave privada se encuentra en /etc/openvpn/easy-rsa/pki/private/ca.key.
+He usado como frase de paso 1234567890. Tal y como indica la salida del comando, el certificado se ha creado en /etc/openvpn/easy-rsa/pki/ca.crt, mientras la clave privada se encuentra en /etc/openvpn/easy-rsa/pki/private/ca.key.
   
 ![Ejercicio 1](capturas/1/2.png)
 
-Ahora tenemos que generar los parámetros Diffie-Hellman, los cuáles se usaran para el intercambio de claves durante el apretón de manos TLS entre el servidor de OpenVPN y los clientes que se conecten:
+Ahora tenemos que generar los parámetros Diffie-Hellman, los cuáles se usarán para el intercambio de claves durante el apretón de manos TLS entre el servidor de OpenVPN y los clientes que se conecten:
 ```bash
 ./easyrsa gen-dh
 ```
@@ -121,7 +121,7 @@ Al igual que hemos hecho con el servidor, generaremos el certificado y la clave 
 
 ![Ejercicio 1](capturas/1/5.png)
 
-El certificado y la clave privada necesarios para establecer la conexión VPN se han creado en /etc/openvpn/easy-rsa/pki/issued/ClienteVPN1.crt y /etc/openvpn/easy-rsa/pki/private/ClienteVPN1.key, respectivamente. Estos archivos tienen que ser transferidos al cliente para que la conexión sea efectiva. Para mantener una mejor organización, primero vamos a agruparlos todos en una misma carpeta:
+El certificado y la clave privada necesarios para establecer la conexión VPN se han creado en /etc/openvpn/easy-rsa/pki/issued/ClienteVPN1.crt y /etc/openvpn/easy-rsa/pki/private/ClienteVPN1.key, respectivamente. Estos archivos tienen que ser transferidos al cliente para que la conexión sea efectiva. Para yo organizarme mejor, los he agrupado todos en una misma carpeta:
 ```bash
 mkdir /home/vagrant/ClienteVPN1
 
@@ -132,7 +132,7 @@ chown -R vagrant: /home/vagrant/ClienteVPN1/
 scp -r /home/vagrant/ClienteVPN1/ vagrant@192.168.10.11:
 ```
 
-Ahora crearemos en el lado del servidor el fichero de configuración del túnel que crearemos a partir del fichero de ejemplo existente:
+Ahora crearemos en el lado del servidor el fichero de configuración del túnel, el cual crearemos a partir del fichero de ejemplo que ya existe:
 ```bash
 cp /usr/share/doc/openvpn/examples/sample-config-files/server.conf /etc/openvpn/server/servidor.conf
 ```
@@ -164,14 +164,14 @@ verb 3
 explicit-exit-notify 1
 ```
 
-Una vez creado este fichero en el servidor, podemos activar y habilitar el servicio:
+Una vez creado este fichero en el servidor, podremos activar y habilitar el servicio:
 ```bash
 systemctl enable --now openvpn-server@servidor
 ```
 
 ![Ejercicio 1](capturas/1/6.png)
 
-En el cliente que queremos que use la vpn (Clientevpn1), tenemos que instalar el paquete openvpn:
+En el cliente que queremos que use la vpn (ClienteVPN1), tenemos que instalar el paquete openvpn:
 ```bash
 apt install openvpn
 ```
@@ -186,7 +186,7 @@ mv ClienteVPN1/* /etc/openvpn/client/
 chown root: /etc/openvpn/client/*
 ```
 
-Al igual que hicimos con el servidor, copiamos la plantilla de configuración del cliente y la modificamos para que se adapte a nuestras circunstancias:
+Al igual que hicimos con el servidor, copiamos la plantilla de configuración del cliente y la modificamos para que tenga nuestra configuración:
 ```bash
 cp /usr/share/doc/openvpn/examples/sample-config-files/client.conf /etc/openvpn/client/cliente.conf
 ```
@@ -212,30 +212,30 @@ remote-cert-tls server
 verb 3
 ```
 
-Habilitamos y empezamos el servicio:
+Habilitamos y levantamos el servicio:
 ```bash
 systemctl enable --now openvpn-client@cliente
 ```
 
-Y verificamos si el servicio está funcionando correctamente:
+Verificamos si el servicio del cliente está funcionando correctamente:
 ```bash
 systemctl status openvpn-client@cliente
 ```
 
-Vemos el servicio activo:
+Verificamos si el servicio del servidor está funcionando correctamente:
 ```bash
 systemctl status openvpn-server@servidor
 ```
 
 ![Ejercicio 1](capturas/1/7.png)
 
-Podemos ver que tanto en el servidor como en el cliente se han creado dos interfaces llamadas “tun0” con la ip que asignamos en el servidor:
+Podemos ver que, tanto en el servidor como en el cliente, se han creado dos interfaces llamadas “tun0” con la ip que asignamos en el servidor:
 
 ![Ejercicio 1](capturas/1/8.png)
 
 ![Ejercicio 1](capturas/1/9.png)
 
-En el cliente interno (yo lo he llamado ClienteVPN2) solo tenemos que cambiar la ruta por defecto para que use el servidor:
+En el cliente interno (lo he llamado ClienteVPN2, aunque de Cliente VPN tiene mas bien poco) solo tenemos que cambiar la ruta por defecto para que use el servidor:
 ```bash
 ip route del default
 ip route add default via 192.168.11.10
@@ -251,7 +251,7 @@ Pruebas de funcionamiento (todas hechas desde ClienteVPN1):
 
 ![Ejercicio 1](capturas/1/11.png)
 
-Como vemos, el clientevpn (ClienteVPN1) puede hacer ping perfectamente a la máquina en la otra red y si vemos la salida del comando traceroute, atraviesa el túnel para llegar a su destino.
+Como vemos, el ClienteVPN1 puede hacer ping perfectamente a la máquina en la otra red y si vemos la salida del comando traceroute, atraviesa el túnel para llegar a su destino.
 
 ------------------------------------------------------------------------------------------------------------------------
 
