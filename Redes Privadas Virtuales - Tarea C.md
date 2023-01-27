@@ -89,7 +89,7 @@ Ahora vamos a tener que crear los ficheros de configuración necesarios en el di
 cd /etc/wireguard/
 ```
 
-Ahora, generaremos el par de claves usando el comando que nos proporcionan en la página oficial de Wireguard:
+Tras esto, generaremos el par de claves usando el comando que nos proporcionan en la página oficial de Wireguard:
 ```bash
 wg genkey | tee serverprivatekey | wg pubkey > serverpublickey
 ```
@@ -128,7 +128,7 @@ wg-quick up wg0
 ```
 ![Ejercicio 3](capturas/3/3.png)
 
-Para desactivarla sería tan sencillo como:
+Para desactivarla ejecutaríamos lo siguiente:
 ```bash
 wg-quick down wg0
 ```
@@ -138,7 +138,7 @@ wg
 ```
 ![Ejercicio 3](capturas/3/4.png)
 
-También podemos ver que se ha creado la interfaz que hemos definido:
+También podemos ver que se ha creado la interfaz que hemos definido con el comando ip a:
 
 ![Ejercicio 3](capturas/3/5.png)
 
@@ -219,7 +219,11 @@ También podemos ver la interfaz que hemos creado:
 
 ![Ejercicio 3](capturas/3/9.png)
 
-Ya tenemos el cliente configurado, así que ahora debemos agregar el "Peer" al lado del cliente. Esto se debe hacer por cada cliente conectado. Esto es lo que el fichero de configuración del servidor parecerá cuando esté terminado:
+Ya tenemos el cliente configurado, así que ahora debemos agregar el "Peer" al lado del cliente. Para ello, nos volveremos al servidor.
+
+Esto se debe hacer por cada cliente conectado. 
+
+Cuando el fichero de configuración del servidor esté terminado quedará así:
 ```bash
 nano wg0.conf
 
@@ -243,7 +247,7 @@ En el bloque “Peer” hemos incluido lo siguiente:
     PublicKey: La clave pública del cliente.
     PersistentKeepAlive: Si no hay intercambio de paquetes entre las máquinas tras 25 segundos, se enviará un paquete para averiguar si la conexión sigue activa.
 
-Con este bloque que hemos añadido, ya podemos reiniciar el servicio:
+Hecho esto, ya podemos reiniciar el servicio:
 ```bash
 wg-quick down wg0
 ```
@@ -260,7 +264,9 @@ wg
 ```
 ![Ejercicio 3](capturas/3/12.png)
 
-Con esto ya hemos terminado completamente con el lado del cliente Linux. Probemos si ha funcionado:
+Con esto ya hemos terminado completamente con el cliente Linux. 
+
+Probemos si ha funcionado:
 
 - Ping y traceroute desde el cliente VPN a la red interna:
 
@@ -273,17 +279,18 @@ Con esto ya hemos terminado completamente con el lado del cliente Linux. Probemo
 
 ## Cliente Windows (Windows 10)
 
-Configuro estáticamente la interfaz:
+Lo primero que haré será configurar estáticamente la interfaz:
 ```cmd
 netsh interface ip set address name="Ethernet" static 192.168.99.12 255.255.255.0 192.168.99.10
 ```
 
+Luego instalaremos el programa de Windows desde la página oficial de WireGuard. 
 
-Instalar el programa de Windows desde la página oficial es el primer paso. Después, al abrirlo, debemos crear un túnel vacío (empty tunnel). Al pulsar el botón, Windows nos generará automáticamente las claves necesarias. Finalmente, el fichero de configuración se rellenará de la forma correspondiente.
+Después, ya una vez dentro del programa, debemos crear un túnel vacío (empty tunnel). Al pulsar el botón, Windows nos generará automáticamente las claves necesarias. Finalmente, el fichero de configuración de igual forma que en el cliente Linux.
 
 ![Ejercicio 3](capturas/3/15.png)
 
-Una vez hecho esto, pasamos al lado del servidor, en el cual tendremos que añadir un nuevo bloque “Peer” al igual que hicimos con el cliente linux:
+Una vez hecho esto, pasamos de nuevo al lado del servidor, en el cual tendremos que añadir un nuevo bloque “Peer” al igual que hicimos con el cliente Linux:
 ```bash
 nano /etc/wireguard/wg0.conf
  
@@ -308,7 +315,7 @@ AllowedIPs = 10.99.99.3/32
 PersistentKeepAlive = 25
 ```
 
-Ahora que lo hemos hecho, podemos reiniciar el servicio en el servidor:
+Ahora que lo hemos hecho, podremos reiniciar el servicio en el servidor:
 ```bash
 wg-quick down wg0
 
@@ -323,7 +330,7 @@ Podemos ver en el lado del servidor que se ha añadido un nuevo “Peer”:
 
 ![Ejercicio 3](capturas/3/17.png)
 
-Ahora hagamos las pruebas:
+Hagamos las pruebas:
 
 - Ping y traceroute desde el cliente windows a la red interna:
 
@@ -334,7 +341,7 @@ Ahora hagamos las pruebas:
 ![Ejercicio 3](capturas/3/19.png)
 
 ### Cliente Android (Android 11)
-    Para este ejercicio, he usado un móvil real con Android 11 en lugar de una máquina virtual. Es por ello que ahora el servidor VPN será mi anfitrión en lugar de la máquina virtual. Esto no afecta a la configuración del cliente Android, ya que la configuración del servidor es la misma.
+    Para este ejercicio, he usado un móvil real con Android 11 en lugar de una máquina virtual. Es por ello que ahora el servidor VPN será mi anfitrión en lugar de la máquina virtual. Esto no afecta a la configuración del cliente Android, ya que la metodología es la misma.
 
 Para usar Wireguard con Android, primero tenemos que descargarnos la aplicación desde la playstore:
 
@@ -344,7 +351,7 @@ Una vez en la aplicación, veremos que nos da tres opciones para crear el túnel
 
 ![Ejercicio 3](capturas/3/21.png)
 
-En nuestro caso, considero que es más sencillo usar la opción de “escanear desde código QR”. Para ello, primero tendremos que crear el fichero de configuración en nuestra máquina, y después nos descargaremos un paquete para convertir dicho fichero en un código qr que pueda escanear nuestro dispositivo móvil (tenemos que generar el par de claves en el servidor para el cliente):
+En mi caso, considero que es más sencillo y rápido usar la opción de “escanear desde código QR”. Para ello, primero tendremos que crear el fichero de configuración en nuestra máquina servidora VPN, y después nos descargaremos un paquete para convertir dicho fichero en un código qr que pueda escanear nuestro dispositivo móvil (tenemos que generar el par de claves en el servidor VPN para el cliente Android):
 ```bash
 wg genkey | tee clientprivatekey | wg pubkey > clientpublickey
 ```
@@ -358,7 +365,7 @@ cat clientpublickey
 XlT0cBYhsCJB1ega1mlkhfOijIAM5t5lWXkcirCzzSo=
 ```
 
-Nos generamos el fichero de configuración tal y como hicimos con el cliente linux:
+Crearemos el fichero de configuración tal y como hicimos con el cliente Linux:
 ```bash
 nano ClienteAndroid.conf
 
@@ -414,7 +421,7 @@ wg-quick down wg0
 wg-quick up wg0
 ```
 
-En este momento podemos ver que está conectado el cliente Android (tras iniciar el túnel en el dispositivo android):
+En este momento podemos ver que está conectado el cliente Android (tras iniciar el túnel en el dispositivo móvil):
 
 ![Ejercicio 3](capturas/3/26.png)
 
