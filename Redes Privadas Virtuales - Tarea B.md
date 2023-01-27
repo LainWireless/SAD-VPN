@@ -17,7 +17,7 @@
 
 ### Creación de los escenarios
 
-Para esta parte de la práctica, he optado por hacerla en dos escenarios Vagrant, por lo cuál esta parte habrá dos Vagrantfiles diferentes:
+Para esta parte de la práctica, he optado por hacerla en dos escenarios Vagrant, por lo cuál en esta parte habrá dos Vagrantfiles diferentes (lo he hecho así para organizarme mejor):
 
 El Vagrantfile del primer escenario que montaremos (el que actuará como servidor):
 ```ruby
@@ -83,11 +83,11 @@ Vagrant.configure("2") do |config|
 
 Tendremos el siguiente escenario:
 
-     En el escenario 1 (172.30.0.0/24): Hay dos máquinas conectadas a través de una red interna. La máquina "Servidor" tendrá una conexión a internet y será alcanzable por "Servidor2", mientras que la máquina "Cliente" sólo será capaz de acceder a "Servidor".
+     En el escenario 1 (172.30.0.0/24): Hay dos máquinas conectadas a través de una red interna. La máquina "Servidor1" tendrá una conexión a internet y será alcanzable por "Servidor2", mientras que la máquina "Cliente1" sólo será capaz de acceder a "Servidor1".
 
-     En el escenario 2 (172.20.0.0/24): También hay dos máquinas, incluyendo "Servidor2" que será accesible desde mi máquina "Servidor" y "Cliente2" que solo tendrá conexión a "Servidor2".
+     En el escenario 2 (172.20.0.0/24): También hay dos máquinas, incluyendo "Servidor2" que será accesible desde la máquina "Servidor1" y su cliente "Cliente2", este último solo tendrá conexión a "Servidor2".
 
-### Configuración en el escenario 1 (servidor)
+### Configuración en el escenario 1 (Servidor)
 
 En primer lugar tendremos que crear un fichero llamado vars (cuyo contenido lo sacaremos de una plantilla que hay en el mismo directorio), para que contenga la información que después tendrá nuestra Autoridad Certificadora:
 ```bash
@@ -120,13 +120,13 @@ Por último, antes de crear la Autoridad Certificadora, tendremos que crear una 
 ```
 ![Ejercicio 2](capturas/2/2.png)
 
-Ahora ya podemos crear la Autoridad Certificadora propiamente dicha:
+Ahora ya podemos crear la Autoridad Certificadora:
 ```bash
 ./easyrsa build-ca
 ```
 ![Ejercicio 2](capturas/2/3.png)
 
-Ya tenemos nuestra Autoridad Certificadora lista, por lo que lo primero que tenemos que hacer es crear y firmar el certificado que usará nuestra máquina “Servidor”:
+Ya tenemos nuestra Autoridad Certificadora lista, por lo que lo primero que tenemos que hacer es crear y firmar el certificado que usará nuestra máquina “Servidor1”:
 ```bash
 ./easyrsa gen-req server
 ```
@@ -149,7 +149,7 @@ Una vez que hemos creado el certificado del servidor y lo hemos firmado, pasemos
 ```
 ![Ejercicio 2](capturas/2/7.png)
 
-Ahora vamos a tener que copiar los ficheros que necesitaremos para que el servidor vpn funcione a /etc/openvpn/server:
+Ahora vamos a tener que copiar los ficheros que necesitaremos para que el servidor vpn funcione en /etc/openvpn/server:
 ```bash
 cp ca.crt /etc/openvpn/server/
 
@@ -160,7 +160,7 @@ cp issued/server.crt /etc/openvpn/server/
 cp private/server.key /etc/openvpn/server/
 ```
 
-Tenemos que hacer llegar a la máquina “Servidor2” los ficheros que necesitará para conectarse a mi servidor VPN. En mi caso he usado scp, pero hay muchos más métodos para pasarlos:
+Tenemos que hacer llegar a la máquina “Servidor2” los ficheros que necesitará para conectarse a mi servidor VPN. En mi caso he usado scp::
 ```bash
 scp ca.crt vagrant@192.168.121.251:
 
@@ -225,7 +225,7 @@ ip r add default via 172.30.0.10
 
 Con esto hemos terminado en el lado del escenario 1.
 
-### Configuración en el escenario 2 (cliente)
+### Configuración en el escenario 2 (Cliente)
 
 En este escenario tenemos que configurar la máquina “Servidor2” para que actúe como el otro extremo del túnel vpn. Para ello, lo primero es mover los ficheros que enviamos desde el escenario 1 a la carpeta adecuada:
 ```bash
@@ -269,7 +269,7 @@ Ahora iniciamos el servicio:
 systemctl start openvpn-client@cliente
 ```
 
-Podemos ver el servicio que acabamos de iniciar:
+Vamos a comprobar que el servicio está funcionando correctamente:
 
 ![Ejercicio 2](capturas/2/9.png)
 
