@@ -8,9 +8,9 @@
 
      Configura una VPN sitio a sitio usando WireGuard. Documenta el proceso adecuadamente y compáralo con el del apartado B.
 
-En esta ocasión, estamos montando el mismo escenario que en el apartado B pero usando Wireguard para la conexión. Por lo tanto, he usado el mismo archivo 'Vagrantfile' para montar el entorno. Una vez hecho esto, necesitamos configurar correctamente las máquinas para que puedan establecer la conexión.
+En esta ocasión, estamos montando el mismo escenario que en el apartado B pero usando Wireguard para la conexión. Por lo tanto, he usado el mismo código del archivo 'Vagrantfile' para montar el entorno. Una vez hecho esto, necesitamos configurar correctamente las máquinas para que puedan establecer la conexión.
 
-Empezando por ambos clientes, es necesario modificar su ruta predeterminada (si no se había hecho con Vagrant, este paso no sería requerido):
+Empezando por ambos clientes, es necesario modificar su ruta predeterminada:
 
 En el cliente del escenario 1:
 ```bash
@@ -28,7 +28,7 @@ ip r add default via 172.20.0.10
 
 Una vez que hemos hecho esto, podemos pasar a las máquinas que actuarán como servidor y cliente de Wireguard.
 
-En la máquina “Servidor” del escenario 1 instalamos en primer lugar wireguard:
+En la máquina “Servidor1” del escenario 1 instalamos Wireguard:
 ```bash
 apt install wireguard
 ```
@@ -83,7 +83,7 @@ wg
 ```
 ![Ejercicio 4](capturas/4/4.png)
 
-Ahora debemos configurar la máquina “Servidor2” que actuará como cliente de wireguard en el escenario 2. Así pues, en primer lugar instalamos wireguard en esa máquina:
+Ahora debemos configurar la máquina “Servidor2” que actuará como cliente de Wireguard en el escenario 2. Así que, instalamos Wireguard en esa máquina:
 ```bash
 apt install wireguard
 ```
@@ -148,7 +148,7 @@ AllowedIPs = 0.0.0.0/0
 PersistentKeepAlive = 25
 ```
 
-Ahora reiniciamos el servicio en la máquina “Servidor” del escenario 1:
+Ahora reiniciamos el servicio en la máquina “Servidor1” del escenario 1:
 ```bash
 wg-quick down wg0
 
@@ -168,7 +168,7 @@ Y podemos ver que se ha establecido la conexión:
 
 Ahora ya podemos realizar las pruebas necesarias:
 
-- Rutas en la máquina “Servidor” del escenario 1:
+- Rutas en la máquina “Servidor1” del escenario 1:
 
 ![Ejercicio 4](capturas/4/10.png)
 
